@@ -1,0 +1,43 @@
+body {
+  background-color: #f0f9f3; /* Pastel Green */
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #7f9a92; /* Pastel Blue */
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: #a3d8d5; /* Light pastel blue */
+  border-color: #7fa7a5;
+}
+
+.btn-secondary {
+  background-color: #d3e0e9; /* Light pastel blue */
+  border-color: #b0c4cd;
+}
+
+.btn-danger {
+  background-color: #f5b7b1; /* Light red */
+  border-color: #e74c3c;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #d3d3d3;
+  border-radius: 8px;
+}
+
+.card-body {
+  background-color: #e8f6f3; /* Light pastel green */
+}
+
+/* Form Styles */
+.form-label, .form-check-label {
+  color: #7f9a92; /* Pastel Blue */
+}
+
+.form-select {
+  border-color: #b0c4cd;
+}
