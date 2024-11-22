@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron' //aqui se modifica tambien
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -72,3 +72,16 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+ipcMain.handle('openConfirmationDialog', async (event, title, message) => {
+  const window = BrowserWindow.getFocusedWindow();
+  const result = await dialog.showMessageBox(window, {
+  type: 'warning',
+  title: title,
+  message: message,
+  buttons: ['Yes', 'Cancel'],
+  cancelId: 1,
+  defaultId: 0
+  });
+  console.log(result.response);
+  return result.response === 0;
+  });
