@@ -1,12 +1,15 @@
-import Counter from "./components/Counter";
-import "styles/style"
+import "styles/style.css"
+
 import TaskList from "./components/TaskList";
+import NewTask from "./components/NewTask";
+import EditingTask from "./components/EditingTask";
+
 export default function App() {
   return (
-    <div>
+    <>
       <TaskList/>
 
-    </div>
+    </>
   );
 }
 

@@ -6,9 +6,9 @@ Comienzos del programa:
 
 Trabajando en el programa:
     1-Modificamos la vista principal que veremos en un html a parte, que luego iremos selecionando el código en la carpeta components:
-        ·Creamos un css con los diferentes colores que usaremos en el proyecto y sus diferentes vistas.
-        ·La vista inicial se diferencia de color de fondo entres otras dos vistas de crear nueva tarea y editar tarea.
-    2-
+        ·Creamos un css con los diferentes colores y estructura que usaremos en sus diferentes vistas.
+        ·La vista inicial se diferencia de color de fondo entres las otras dos vistas de crear nueva tarea y editar tarea.
+    2-Posicionamos las funciones que teniamos anteriormente en el html, en los 'jsx' correspondientes y vamos probando su funcionamiento.
     3-
     4-
     5-
