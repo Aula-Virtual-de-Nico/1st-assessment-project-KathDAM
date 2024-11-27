@@ -1,1 +1,37 @@
 /*# sourceMappingURL=style.css.map */
+body {
+    background-color: #f0f9f3; 
+    font-family: Arial, sans-serif;
+  }
+  h1 {
+    color: #7f9a92; 
+  }
+
+  /* Button */
+  .btn-primary {
+    background-color: #a3d8d5; 
+    border-color: #7fa7a5;
+  }
+  .btn-secondary {
+    background-color: #d3e0e9; 
+    border-color: #b0c4cd;
+  }
+  .btn-danger {
+    background-color: #f5b7b1; 
+    border-color: #e74c3c;
+  }
+  .card {
+    background-color: #ffffff;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+  }
+  .card-body {
+    background-color: #e8f6f3; 
+  }
+  /* Form */
+  .form-label, .form-check-label {
+    color: #7f9a92; 
+  }
+  .form-select {
+    border-color: #b0c4cd;
+  }

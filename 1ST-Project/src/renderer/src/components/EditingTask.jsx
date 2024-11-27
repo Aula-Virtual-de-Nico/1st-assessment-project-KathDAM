@@ -1,36 +1,68 @@
-import { React } from 'react';
+import React, { useState } from 'react';
 
 export default function EditingTask() {
+    const [taskTitle, setTaskTitle] = useState('Comprar');
+    const [taskDescription, setTaskDescription] = useState('Tomate, Lechuga, Papel, Queso, Leche...');
+    const [taskStatus, setTaskStatus] = useState('Pending');
+    const [taskDeadline, setTaskDeadline] = useState('2023-11-28');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Aquí iría la lógica para guardar los cambios en la tarea
+        console.log({ taskTitle, taskDescription, taskStatus, taskDeadline });
+    };
+
     return (
         <div class="container">
-            <h1>Editing Task: Comprar</h1>
-            <form id="edit-task-form">
-                <div class="mb-3">
-                    <label for="task-title" class="form-label">Title:</label>
-                    <input type="text" class="form-control" id="task-title" value="Comprar" required></input>
+            <h1>Editing Task: {taskTitle}</h1>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label htmlFor="task-title" className="form-label">Title:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="task-title"
+                        value={taskTitle}
+                        onChange={(e) => setTaskTitle(e.target.value)}
+                        required
+                    />
                 </div>
-                <div class="mb-3">
-                    <label for="task-description" class="form-label">Description:</label>
-                    <textarea class="form-control" id="task-description" rows="3" required>Tomate, Lechuga, Papel, Queso, Leche...</textarea>
-                    
+                <div className="mb-3">
+                    <label htmlFor="task-description" className="form-label">Description:</label>
+                    <textarea
+                        className="form-control"
+                        id="task-description"
+                        rows="3"
+                        value={taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                        required />
                 </div>
-                <div class="mb-3">
-                    <label for="task-status" class="form-label">Status:</label>
-                    <select id="task-status" class="form-select">
-                        <option value="Pending" selected>Pending</option>
+                <div className="mb-3">
+                    <label htmlFor="task-status" className="form-label">Status:</label>
+                    <select
+                        id="task-status"
+                        className="form-select"
+                        value={taskStatus}
+                        onChange={(e) => setTaskStatus(e.target.value)} >
+                        <option value="Pending">Pending</option>
                         <option value="In Progress">In Progress</option>
                         <option value="Completed">Completed</option>
                         <option value="Canceled">Canceled</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="task-deadline" class="form-label">Deadline:</label>
-                    <input type="date" class="form-control" id="task-deadline" value="2023-11-28"></input>
+                <div className="mb-3">
+                    <label htmlFor="task-deadline" className="form-label">Deadline:</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        id="task-deadline"
+                        value={taskDeadline}
+                        onChange={(e) => setTaskDeadline(e.target.value)} />
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-danger">Delete</button>
-                    <button type="submit" class="btn btn-primary" id="save" disabled>Save</button>
-                    <button type="button" class="btn btn-secondary">Back</button>
+                <div className="btn-group">
+                    <button type="button" className="btn btn-danger">Delete</button>
+                    <button type="submit" className="btn btn-primary">Save</button>
+                    <button type="button" className="btn btn-secondary">Back</button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,17 @@
-import { React } from 'react';
+import  React , { useState } from 'react';
 
 export default function NewTask() {
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskDescription, setTaskDescription] = useState('');
+    const [taskStatus, setTaskStatus] = useState('Pending');
+    const [taskDeadline, setTaskDeadline] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Aquí iría la lógica para guardar la nueva tarea
+        console.log({ taskTitle, taskDescription, taskStatus, taskDeadline });
+    };
+
     return (
         <div class="container">
             <h1>New Task</h1>

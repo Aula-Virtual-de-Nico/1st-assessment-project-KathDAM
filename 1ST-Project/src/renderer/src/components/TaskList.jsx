@@ -1,4 +1,4 @@
-import { React } from 'react';
+import  React , { useState } from 'react';
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([
@@ -28,7 +28,7 @@ export default function TaskList() {
   }
 
   return (
-    <div className="bg-light mt-4">
+    <div className="mt-4">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1>Task List</h1>
@@ -38,7 +38,6 @@ export default function TaskList() {
           {tasks.map((task, index) => (
             <div className="col-md-4" key={index}>
               <div className="card mb-4">
-                <img src="https://via.placeholder.com/300x200" className="card-img-top" alt="Task Image" />
                 <div className="card-body">
                   <h5 className="card-title">{task.title}</h5>
                   <i className="bi bi-calendar-date">Tiempo faltante: {task.timeLeft}</i>
