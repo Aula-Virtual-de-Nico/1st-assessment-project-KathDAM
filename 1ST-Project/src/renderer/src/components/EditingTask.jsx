@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function EditingTask() {
     const [taskTitle, setTaskTitle] = useState('Comprar');
@@ -13,37 +14,20 @@ export default function EditingTask() {
     };
 
     return (
-        <div class="container">
+        <div className="container">
             <h1>Editing Task: {taskTitle}</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="task-title" className="form-label">Title:</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="task-title"
-                        value={taskTitle}
-                        onChange={(e) => setTaskTitle(e.target.value)}
-                        required
-                    />
+                    <input type="text" className="form-control" id="task-title" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} required/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="task-description" className="form-label">Description:</label>
-                    <textarea
-                        className="form-control"
-                        id="task-description"
-                        rows="3"
-                        value={taskDescription}
-                        onChange={(e) => setTaskDescription(e.target.value)}
-                        required />
+                    <textarea className="form-control" id="task-description" rows="3" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} required />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="task-status" className="form-label">Status:</label>
-                    <select
-                        id="task-status"
-                        className="form-select"
-                        value={taskStatus}
-                        onChange={(e) => setTaskStatus(e.target.value)} >
+                    <select id="task-status" className="form-select" value={taskStatus} onChange={(e) => setTaskStatus(e.target.value)} >
                         <option value="Pending">Pending</option>
                         <option value="In Progress">In Progress</option>
                         <option value="Completed">Completed</option>
@@ -52,12 +36,7 @@ export default function EditingTask() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="task-deadline" className="form-label">Deadline:</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        id="task-deadline"
-                        value={taskDeadline}
-                        onChange={(e) => setTaskDeadline(e.target.value)} />
+                    <input type="date"  className="form-control" id="task-deadline" value={taskDeadline} onChange={(e) => setTaskDeadline(e.target.value)} />
                 </div>
                 <div className="btn-group">
                     <button type="button" className="btn btn-danger">Delete</button>
