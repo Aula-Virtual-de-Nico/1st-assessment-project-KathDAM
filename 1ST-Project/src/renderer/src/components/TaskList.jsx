@@ -1,30 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // navegación entre ventanas jsx
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'; // navegación entre ventanas jsx
 
 export default function TaskList() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [tasks, setTasks] = useState([
-    {
-      title: "Comprar",
-      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      description: "Tomate, Lechuga, Queso, Leche",
-      status: "Pending",
-      showDetails: false,
-    },
-    {
-      title: "Viajes",
-      deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-      description: "Alemania, Turquía, Lisboa, Qatar, Reino Unido",
-      status: "Completed",
-      showDetails: false,
-    },
-    {
-      title: "Renovar papeles",
-      deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-      description: "Pedir cita, pagar renovación",
-      status: "Pending",
-      showDetails: false,
-    },
+    { title: "Comprar", deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), description: "Tomate, Lechuga, Queso, Leche", status: "Pending", showDetails: false },
+    { title: "Viajes", deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), description: "Alemania, Turquía, Lisboa, Qatar, Reino Unido", status: "Completed", showDetails: false },
+    { title: "Renovar papeles", deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), description: "Pedir cita, pagar renovación", status: "Pending", showDetails: false },
   ]);
 
   const [filter, setFilter] = useState({ showCompleted: true, showCanceled: true });
@@ -89,22 +73,32 @@ export default function TaskList() {
     return true;
   });
 
-   // Navegar a "New Task"
-  const navigateToNewTask = () => {
-    navigate ('/new-task');
-  };
-
-  // Navegar a "Edit Task" pasando el id
+ 
   const navigateToEditTask = (index) => {
-    navigate (`/edit-task/${index}`);
+    navigate(`/edit-task/${index}`, { state: { task: tasks[index] } });
   };
+  
 
+  useEffect(() => {
+    if (location.state?.newTask) {
+      const newTask = location.state.newTask;
+      setTasks((prevTasks) => {
+        // Evitar tareas duplicadas
+        if (!prevTasks.some(task => task.title === newTask.title && task.deadline === newTask.deadline)) {
+          return [...prevTasks, newTask];
+        }
+        return prevTasks;
+      });
+      navigate('/', { state: null });  // Limpiar el state
+    }
+  }, [location.state, navigate]);
+  
   return (
     <div className="mt-4">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1>Task List</h1>
-          <button className="btn btn-primary" id="new-task-btn" onClick={navigateToNewTask}>New Task</button>
+          <button className="btn btn-primary" id="new-task-btn" onClick={() => navigate('/new-task')}>New Task</button>
         </div>
         
         <div className="mb-4">
