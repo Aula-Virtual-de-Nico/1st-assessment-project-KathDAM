@@ -9,7 +9,8 @@ export default function EditingTask() {
   const [taskTitle, setTaskTitle] = useState(taskFromState?.title || '');
   const [taskDescription, setTaskDescription] = useState(taskFromState?.description || '');
   const [taskStatus, setTaskStatus] = useState(taskFromState?.status || '');
-  const [taskDeadline, setTaskDeadline] = useState(taskFromState?.deadline || '');
+  //Cambia Objeto a String para que muestre la fecha
+  const [taskDeadline, setTaskDeadline] = useState(taskFromState?.deadline instanceof Date ? taskFromState.deadline.toISOString().split('T')[0]: taskFromState?.deadline || 'yyyy-mm-dd');
   const [isDirty, setIsDirty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -37,8 +38,7 @@ export default function EditingTask() {
       status: taskStatus,
       deadline: taskDeadline,
     };
-    console.log('Task saved:', updatedTask);
-    navigate('/');
+    navigate('/', { state: { updatedTask } });
   };
 
   const handleBack = () => {
@@ -54,7 +54,7 @@ export default function EditingTask() {
   };
 
   const confirmDelete = () => {
-    console.log('Task deleted');
+    console.log();
     setShowDeleteModal(false);
     navigate('/');
   };

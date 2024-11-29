@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // navegación entre ventanas jsx
+import React, { useState } from 'react';
+import {  useNavigate } from 'react-router-dom'; // navegación entre ventanas jsx
+import tasksData from'../../../main/tasksData'; 
 
 export default function TaskList() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [tasks, setTasks] = useState([
-    { title: "Comprar", deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), description: "Tomate, Lechuga, Queso, Leche", status: "Pending", showDetails: false },
-    { title: "Viajes", deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), description: "Alemania, Turquía, Lisboa, Qatar, Reino Unido", status: "Completed", showDetails: false },
-    { title: "Renovar papeles", deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), description: "Pedir cita, pagar renovación", status: "Pending", showDetails: false },
-  ]);
-
+  const [tasks, setTasks] = useState(tasksData);
   const [filter, setFilter] = useState({ showCompleted: true, showCanceled: true });
   const [sortKey, setSortKey] = useState("title");
   //Este código puede ser más corto, pero como queria modificar el estilo del pop-up, se ha modificado

@@ -6,8 +6,7 @@ export default function NewTask() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('Pending');
-    const [deadline, setDeadline] = useState(() => {
-        const date = new Date();
+    const [deadline, setDeadline] = useState(() => {const date = new Date();
         date.setDate(date.getDate() + 7);
         return date.toISOString().substring(0, 10);
     });
@@ -73,7 +72,7 @@ export default function NewTask() {
                 </div>
 
                 <div>
-                    <button type="submit" className="btn btn-primary">Save</button>
+                    <button type="submit" className="btn btn-primary" disabled={!title.trim()}>Save</button>
                     <button type="button" className="btn btn-danger" onClick={handleDiscard}>Discard</button>
                 </div>
             </form>
