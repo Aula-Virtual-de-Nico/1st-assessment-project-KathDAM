@@ -1,44 +1,39 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-export default function AppEditItem() {
-  // item es el estado que contiene el elemento a editar
-  const [item, setItem] = useState({})
+export default function AppEditTask() {
+  const [item, setTask] = useState({})
+  const [originalTask, setOriginalTask] = useState({})
 
-  // originalItem estado original del elemento
-  // usado para comparar si hubo cambios
-  const [originalItem, setOriginalItem] = useState({})
-
-  // Obtiene el id del item de la URL
-  const { itemId } = useParams()
+  const { taskId } = useParams()
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    window.api.getItem(itemId).then((itemFetched) => {
-      setItem({ ...itemFetched })
-      setOriginalItem({ ...itemFetched })
+    window.api.getTask(taskId).then((taskFetched) => {
+      setTask({ ...taskFetched })
+      setOriginalTask({ ...taskFetched })
     })
   }, [])
 
   function handleSubmitChanges(event) {
     event.preventDefault()
-    const name = event.target.itemName.value
+    const name = event.target.taskName.value
     if (!name) return
-    const newItem = { ...item, name: name }
-    window.api.updateItem(newItem)
+    const newTask = { ...task, name: name }
+    window.api.updateTask(newTask)
     event.target.reset()
-    event.target.itemName.focus()
+    event.target.taskName.focus()
     navigate('/')
   }
 
-  async function handleDelete(item) {
-    const confirm = await window.api.deleteItem(item)
+  async function handleDelete(task) {
+    const confirm = await window.api.deleteTask(task)
     if (confirm) navigate('/')
   }
 
   async function handleDiscard() {
-    const confirm = await window.api.confirmItem(item)
+    const confirm = await window.api.confirmTask(task)
     switch (confirm) {
       case 'discard':
       case 'save':
@@ -50,79 +45,86 @@ export default function AppEditItem() {
   }
 
   function setName(name) {
-    setItem({ ...item, name: name })
+    setTask({ ...task, name: name })
   }
 
   function setQuantity(quantity) {
-    setItem({ ...item, quantity: quantity })
+    setTask({ ...task, quantity: quantity })
   }
 
   return (
-    <div
-      id="app-item-edit"
-      className="container vh-100 d-flex flex-column gap-3 justify-content-center align-items-center"
-    >
-      <h1 className="text-primary">
-        <i className="bi bi-pencil-square"></i> Editar producto
-      </h1>
-      <form action="#" id="itemForm" onSubmit={handleSubmitChanges} className="container">
-        <div className="d-flex flex-column gap-2 align-items-center">
-          <div className="input-group">
-            <span className="input-group-text text-primary col-2">
-              <i className="bi bi-pencil-square"> Producto:</i>
-            </span>
-            <input
-              type="text"
-              id="itemName"
-              name="itemName"
-              required
-              autoComplete="off"
-              className="form-control"
-              placeholder="producto..."
-              onChange={() => setName(event.target.value)}
-              value={item.name ?? ''}
-            />
-          </div>
-          <div className="input-group">
-            <span className="input-group-text text-primary col-2">
-              <i className="bi bi-hash"> Cantidad:</i>
-            </span>
-            <input
-              type="number"
-              id="itemQuantity"
-              name="itemQuantity"
-              autoComplete="off"
-              min="1"
-              className="form-control"
-              placeholder="cantidad..."
-              onChange={() => setQuantity(event.target.value)}
-              value={item.quantity ?? ''}
-            />
-          </div>
-          <div className="d-flex gap-2">
-            <button
-              id="btnDelete"
-              title="Borrar"
-              type="button"
-              className="btn btn-danger"
-              onClick={() => handleDelete(item)}
-            >
-              <i className="bi bi-trash"> Borrar</i>
-            </button>
-            <button id="btnSave" title="Guardar" className="btn btn-primary">
-              <i className="bi bi-save"> Guardar cambios</i>
-            </button>
-            <button
-              id="btnDiscard"
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => handleDiscard()}
-            >
-              <i className="bi bi-arrow-left"> Volver</i>
-            </button>
-          </div>
+    <div className="container">
+      <h1>Editing {taskTitle}</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="task-title" className="form-label">Title:</label>
+          <input type="text" className="form-control" id="task-title" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} required/>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="task-description" className="form-label">Description:</label>
+          <textarea className="form-control" id="task-description"rows="3" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)}required/>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="task-status" className="form-label">Status:</label>
+          <select id="task-status" className="form-select" value={taskStatus} onChange={(e) => setTaskStatus(e.target.value)}>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Canceled">Canceled</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="task-deadline" className="form-label">Deadline:</label>
+          <input type="date" className="form-control" id="task-deadline" value={taskDeadline} onChange={(e) => setTaskDeadline(e.target.value)}
+          />
+        </div>
+        <div className="btn-group">
+          <button type="button" className="btn btn-danger" onClick={handleDelete}> Delete </button>
+          <button type="submit" className="btn btn-primary" disabled={!isDirty}> Save </button>
+          <button type="button" className="btn btn-secondary" onClick={handleBack}> Back </button>
         </div>
       </form>
+
+      {showModal && (
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Unsaved Changes</h4>
+                <button type="button" className="btn-close" onClick={cancelAction} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <p>You have unsaved changes. What would you like to do?</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-light" onClick={confirmDiscard}>Discard</button>
+                <button type="button" className="btn btn-primary" onClick={confirmSave}>Save</button>
+                <button type="button" className="btn btn-secondary" onClick={cancelAction}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Confirm Delete</h4>
+                <button type="button" className="btn-close" onClick={cancelDelete} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete this task?</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-light" onClick={cancelDelete}>Cancel</button>
+                <button type="button" className="btn btn-danger" onClick={confirmDelete}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
