@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
-import {  useNavigate } from 'react-router-dom'; // navegación entre ventanas jsx
-import tasksData from'../../../main/tasksData'; 
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import StoreManager from '../../../main/StoreManager'; // Assuming StoreManager is exported here
+
+// Create an instance of StoreManager
+const storeManager = new StoreManager();
 
 export default function TaskList() {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const [tasks, setTasks] = useState(tasksData);
+  const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState({ showCompleted: true, showCanceled: true });
   const [sortKey, setSortKey] = useState("title");
-  //Este código puede ser más corto, pero como queria modificar el estilo del pop-up, se ha modificado
   const [showModal, setShowModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
+
+  // Fetch tasks from the store when the component mounts
+  useEffect(() => {
+    const tasksFromStore = storeManager.getList(); // Get tasks from Store
+    setTasks(tasksFromStore);
+  }, []);
 
   const handleDelete = (index) => {
     setTaskToDelete(index);
@@ -20,6 +26,8 @@ export default function TaskList() {
 
   const confirmDelete = () => {
     if (taskToDelete !== null) {
+      const taskToDeleteObj = tasks[taskToDelete];
+      storeManager.deleteItem(taskToDeleteObj); // Delete task from Store
       const newList = tasks.filter((_, i) => i !== taskToDelete);
       setTasks(newList);
       setShowModal(false);  
@@ -36,6 +44,7 @@ export default function TaskList() {
     const statuses = ["Pending", "In Progress", "Completed", "Canceled"];
     const nextStatus = statuses[(statuses.indexOf(currentStatus) + 1) % statuses.length];
     newList[index].status = nextStatus;
+    storeManager.updateItem(newList[index]); // Update task status in Store
     setTasks(newList);
   };
 
@@ -55,7 +64,6 @@ export default function TaskList() {
   
     setTasks(sortedTasks);
   };
-  
 
   const handleToggleDetails = (index) => {
     const newTasks = [...tasks];
@@ -69,32 +77,22 @@ export default function TaskList() {
     return true;
   });
 
- 
-  const navigateToEditTask = (index) => {
-    navigate(`/edit-task/${index}`, { state: { task: tasks[index] } });
+  // Navegar a "New Task"
+  const navigateToNewTask = () => {
+    navigate('/new-task');
   };
-  
 
-  useEffect(() => {
-    if (location.state?.newTask) {
-      const newTask = location.state.newTask;
-      setTasks((prevTasks) => {
-        // Evitar tareas duplicadas
-        if (!prevTasks.some(task => task.title === newTask.title && task.deadline === newTask.deadline)) {
-          return [...prevTasks, newTask];
-        }
-        return prevTasks;
-      });
-      navigate('/', { state: null });  // Limpiar el state
-    }
-  }, [location.state, navigate]);
-  
+  // Navegar a "Edit Task" pasando el id
+  const navigateToEditTask = (index) => {
+    navigate(`/edit-task/${index}`);
+  };
+
   return (
     <div className="mt-4">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1>Task List</h1>
-          <button className="btn btn-primary" id="new-task-btn" onClick={() => navigate('/new-task')}>New Task</button>
+          <button className="btn btn-primary" id="new-task-btn" onClick={navigateToNewTask}>New Task</button>
         </div>
         
         <div className="mb-4">
@@ -127,7 +125,7 @@ export default function TaskList() {
                   <h5 className="card-title">{task.title}</h5>
                   <i className="bi bi-calendar-date">Deadline: {task.deadline.toLocaleDateString()}</i>
                   {task.showDetails && <p className="card-text">{task.description}</p>}
-                  <div  className="btn-group">
+                  <div className="btn-group">
                     <button className="btn btn-secondary btn-sm" onClick={() => handleStatusChange(index)}> {task.status} </button>
                     <div>
                       <button className="btn btn-primary btn-sm" onClick={() => navigateToEditTask(index)}>Edit</button>

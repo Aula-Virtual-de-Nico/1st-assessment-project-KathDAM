@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { StoreManager } from '../../../main/StoreManager'; // Assuming StoreManager is in the right location
+
+const store = new StoreManager();
 
 export default function EditingTask() {
   const navigate = useNavigate();
@@ -9,12 +12,13 @@ export default function EditingTask() {
   const [taskTitle, setTaskTitle] = useState(taskFromState?.title || '');
   const [taskDescription, setTaskDescription] = useState(taskFromState?.description || '');
   const [taskStatus, setTaskStatus] = useState(taskFromState?.status || '');
-  //Cambia Objeto a String para que muestre la fecha
-  const [taskDeadline, setTaskDeadline] = useState(taskFromState?.deadline instanceof Date ? taskFromState.deadline.toISOString().split('T')[0]: taskFromState?.deadline || 'yyyy-mm-dd');
+  // Convert the date to string format for display
+  const [taskDeadline, setTaskDeadline] = useState(taskFromState?.deadline instanceof Date ? taskFromState.deadline.toISOString().split('T')[0] : taskFromState?.deadline || 'yyyy-mm-dd');
   const [isDirty, setIsDirty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // Watch for changes to detect if the task was modified
   useEffect(() => {
     const initialTask = taskFromState;
     if (
@@ -33,11 +37,14 @@ export default function EditingTask() {
     e.preventDefault();
     
     const updatedTask = {
+      ...taskFromState,
       title: taskTitle,
       description: taskDescription,
       status: taskStatus,
       deadline: taskDeadline,
     };
+    
+    store.updateItem(updatedTask);  // Update the task in the store
     navigate('/', { state: { updatedTask } });
   };
 
@@ -54,7 +61,7 @@ export default function EditingTask() {
   };
 
   const confirmDelete = () => {
-    console.log();
+    store.deleteItem(taskFromState); // Delete the task from the store
     setShowDeleteModal(false);
     navigate('/');
   };
@@ -83,11 +90,11 @@ export default function EditingTask() {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="task-title" className="form-label">Title:</label>
-          <input type="text" className="form-control" id="task-title" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} required/>
+          <input type="text" className="form-control" id="task-title" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} required />
         </div>
         <div className="mb-3">
           <label htmlFor="task-description" className="form-label">Description:</label>
-          <textarea className="form-control" id="task-description"rows="3" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)}required/>
+          <textarea className="form-control" id="task-description" rows="3" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} required />
         </div>
         <div className="mb-3">
           <label htmlFor="task-status" className="form-label">Status:</label>
@@ -100,16 +107,16 @@ export default function EditingTask() {
         </div>
         <div className="mb-3">
           <label htmlFor="task-deadline" className="form-label">Deadline:</label>
-          <input type="date" className="form-control" id="task-deadline" value={taskDeadline} onChange={(e) => setTaskDeadline(e.target.value)}
-          />
+          <input type="date" className="form-control" id="task-deadline" value={taskDeadline} onChange={(e) => setTaskDeadline(e.target.value)} />
         </div>
         <div className="btn-group">
-          <button type="button" className="btn btn-danger" onClick={handleDelete}> Delete </button>
-          <button type="submit" className="btn btn-primary" disabled={!isDirty}> Save </button>
-          <button type="button" className="btn btn-secondary" onClick={handleBack}> Back </button>
+          <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete</button>
+          <button type="submit" className="btn btn-primary" disabled={!isDirty}>Save</button>
+          <button type="button" className="btn btn-secondary" onClick={handleBack}>Back</button>
         </div>
       </form>
 
+      {/* Modal for unsaved changes */}
       {showModal && (
         <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
@@ -131,6 +138,7 @@ export default function EditingTask() {
         </div>
       )}
 
+      {/* Modal for task deletion */}
       {showDeleteModal && (
         <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
