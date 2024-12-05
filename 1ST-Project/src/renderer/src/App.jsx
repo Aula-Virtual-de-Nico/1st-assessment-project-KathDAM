@@ -14,6 +14,6 @@ export default function App() {
         <Route path="/edit-task/:id" element={<EditingTask />} /> 
         <Route path="/" element={<TaskList />} /> 
       </Routes>
-  </HashRouter>
+    </HashRouter>
   );
 }
