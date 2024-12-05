@@ -9,8 +9,7 @@ export default function EditingTask() {
   const [taskTitle, setTaskTitle] = useState(taskFromState?.title || '');
   const [taskDescription, setTaskDescription] = useState(taskFromState?.description || '');
   const [taskStatus, setTaskStatus] = useState(taskFromState?.status || '');
-  //Cambia Objeto a String para que muestre la fecha
-  const [taskDeadline, setTaskDeadline] = useState(taskFromState?.deadline instanceof Date ? taskFromState.deadline.toISOString().split('T')[0]: taskFromState?.deadline || 'yyyy-mm-dd');
+  const [taskDeadline, setTaskDeadline] = useState(taskFromState?.deadline instanceof Date ? taskFromState.deadline.toISOString().split('T')[0]: taskFromState?.deadline || 'yyyy-mm-dd')
   const [isDirty, setIsDirty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -54,7 +53,6 @@ export default function EditingTask() {
   };
 
   const confirmDelete = () => {
-    console.log();
     setShowDeleteModal(false);
     navigate('/');
   };
@@ -87,7 +85,7 @@ export default function EditingTask() {
         </div>
         <div className="mb-3">
           <label htmlFor="task-description" className="form-label">Description:</label>
-          <textarea className="form-control" id="task-description"rows="3" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)}required/>
+          <textarea className="form-control" id="task-description" rows="3" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} required />
         </div>
         <div className="mb-3">
           <label htmlFor="task-status" className="form-label">Status:</label>
@@ -100,8 +98,7 @@ export default function EditingTask() {
         </div>
         <div className="mb-3">
           <label htmlFor="task-deadline" className="form-label">Deadline:</label>
-          <input type="date" className="form-control" id="task-deadline" value={taskDeadline} onChange={(e) => setTaskDeadline(e.target.value)}
-          />
+          <input type="date" className="form-control" id="task-deadline" value={taskDeadline} onChange={(e) => setTaskDeadline(e.target.value)} />
         </div>
         <div className="btn-group">
           <button type="button" className="btn btn-danger" onClick={handleDelete}> Delete </button>
