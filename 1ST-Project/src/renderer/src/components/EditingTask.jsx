@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Modal from './Modal';
 
 export default function EditingTask() {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function EditingTask() {
     const [taskStatus, setTaskStatus] = useState(originalTask.status || 'Pending');
     const [taskDeadline, setTaskDeadline] = useState(originalTask.deadline || '');
     const [isModified, setIsModified] = useState(false);
+    const [showModal, setShowModal] = useState(false);  
+    const [modalType, setModalType] = useState('');  
 
     useEffect(() => {
         if (
@@ -36,26 +39,40 @@ export default function EditingTask() {
 
     const handleBack = () => {
         if (isModified) {
-            const confirmSave = window.confirm("Save changes before leaving?");
-            if (confirmSave) {
-                handleSubmit();
-            } else if (window.confirm("Discard changes?")) {
-                navigate('/');
-            }
+            setModalType('save');
+            setShowModal(true);
         } else {
             navigate('/');
         }
     };
 
     const handleDelete = () => {
-        if (window.confirm("Are you sure you want to delete this task?")) {
-            const updatedTasks = tasks.filter((_, index) => index !== parseInt(id, 10));
-            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-            navigate('/');
-        }
+        setModalType('delete');
+        setShowModal(true);
     };
 
-    return (
+    const handleConfirmSave = () => {
+        handleSubmit();
+        setShowModal(false);
+    };
+
+    const handleConfirmDiscard = () => {
+        navigate('/');
+        setShowModal(false);
+    };
+
+    const handleConfirmDelete = () => {
+        const updatedTasks = tasks.filter((_, index) => index !== parseInt(id, 10));
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+        navigate('/');
+        setShowModal(false);
+    };
+
+    const handleCancelModal = () => {
+        setShowModal(false);
+    };
+
+   return (
         <div className="container">
             <h1>Editing Task: {originalTask.title || 'Untitled'}</h1>
             <form onSubmit={handleSubmit}>
@@ -86,6 +103,23 @@ export default function EditingTask() {
                     <button type="submit" className="btn btn-primary" disabled={!isModified}>Save</button>
                 </div>
             </form>
+
+            {/* Modal */}
+            <Modal 
+                showModal={showModal} 
+                title={
+                    modalType === 'save' ? 'Save Changes?' :
+                    modalType === 'delete' ? 'Delete Task?' :
+                    ''
+                }
+                message={
+                    modalType === 'save' ? 'Do you want to save the changes you made to this task?' :
+                    modalType === 'delete' ? 'Are you sure you want to delete this task?' :
+                    ''
+                }
+                onCancel={handleCancelModal} 
+                onConfirm={modalType === 'save' ? handleConfirmSave : modalType === 'delete' ? handleConfirmDelete : handleConfirmDiscard} 
+            />
         </div>
     );
 }

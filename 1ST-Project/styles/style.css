@@ -1,4 +1,4 @@
-/* General Styles */
+/*# sourceMappingURL=style.css.map */
 body {
   background-color: #f0f9f3;
   font-family: Arial, sans-serif;
@@ -8,7 +8,37 @@ h1 {
   color: #7f9a92;
 }
 
-/* Buttons */
+/* Button (Status badges) */
+.badge {
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  margin-right: 10px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.badge:hover {
+  opacity: 0.8;
+}
+
+/* Ajuste de los botones dentro de la tarjeta */
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Permite que los botones se ajusten cuando no haya suficiente espacio */
+  gap: 10px;
+  margin-top: 10px;
+  padding-bottom: 10px; /* Evita que los botones se desborden hacia abajo */
+}
+
+.btn-group .btn {
+  margin: 0; /* Elimina el margen innecesario */
+  padding: 8px 12px; /* Establece un tamaño uniforme para los botones */
+  width: auto; /* Permite que los botones mantengan un tamaño adecuado */
+}
+
+/* Botones de estado con colores pastel */
 .btn-primary {
   background-color: #a3d8d5;
   border-color: #7fa7a5;
@@ -56,6 +86,7 @@ h1 {
   border: 1px solid #d3d3d3;
   border-radius: 8px;
   padding: 3%;
+  box-sizing: border-box; /* Asegura que el padding no cause desbordamientos */
 }
 
 .card-body {
@@ -66,7 +97,7 @@ h1 {
   margin-right: 20px;
 }
 
-/* Forms */
+/* Form */
 .form-label,
 .form-check-label {
   color: #7f9a92;
@@ -79,14 +110,14 @@ h1 {
 
 .form-select:focus {
   border-color: #b0c4cd;
-  box-shadow: none;
+  box-shadow: 0 0 0 0rem;
 }
 
 label.me-2 {
   color: #7f9a92;
 }
 
-/* Modal */
+/* Modal confirmación */
 .modal-content {
   background-color: #a6c5b5;
   color: white;
@@ -99,12 +130,14 @@ label.me-2 {
 }
 
 .modal-footer .btn-light {
-  background-color: #7f9a92; /* Botón Cancelar */
+  background-color: #7f9a92;
+  /* Botón cancelar */
   color: white;
 }
 
 .modal-footer .btn-danger {
-  background-color: #dd786f; /* Botón Eliminar */
+  background-color: #dd786f;
+  /* Botón eliminar */
   border-color: #d43f00;
 }
 
