@@ -22,12 +22,12 @@ export default function App() {
   // Cargar las tareas desde localStorage al montar el componente
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    const combinedTasks = [...defaultTasks, ...storedTasks];
+    // Combina las tareas predeterminadas con las tareas de localStorage, asegurando que no haya duplicados
+    const combinedTasks = [...storedTasks, ...defaultTasks].filter((value, index, self) =>
+      index === self.findIndex((t) => t.id === value.id)
+    );
 
-    // Elimina duplicados (basado en id) si las tareas predeterminadas ya existen
-    const uniqueTasks = Array.from(new Map(combinedTasks.map(task => [task.id, task])).values());
-
-    setTasks(uniqueTasks);
+    setTasks(combinedTasks);
   }, []);
 
   // Guardar las tareas en localStorage cada vez que cambie el estado
@@ -38,15 +38,22 @@ export default function App() {
   }, [tasks]);
 
   const addTask = (task) => {
-    setTasks([...tasks, { id: tasks.length + 1, ...task }]);
+    const newTask = { id: Date.now(), ...task }; 
+    const updatedTasks = [...tasks, newTask];
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // Guardar tareas en localStorage
   };
-
+  
   const updateTask = (id, updatedTask) => {
-    setTasks(tasks.map(task => task.id === id ? { ...task, ...updatedTask } : task));
-  };
+    const updatedTasks = tasks.map(task => task.id === id ? { ...task, ...updatedTask } : task);
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // Guardar tareas actualizadas
+};
+
 
   const deleteTask = (id) => {
     setTasks(tasks.filter(task => task.id !== id));
+    localStorage.setItem("tasks", JSON.stringify(tasks.filter(task => task.id !== id))); // Guardar tareas actualizadas en localStorage
   };
 
   const handleSort = (key) => setSortKey(key);
@@ -59,6 +66,7 @@ export default function App() {
     const newTasks = tasks.filter((task) => task.id !== taskToDelete);
     setTasks(newTasks);
     setShowModal(false);
+    localStorage.setItem("tasks", JSON.stringify(newTasks)); // Guardar tareas actualizadas en localStorage
   };
 
   const handleStatusChange = (index) => {
@@ -68,6 +76,7 @@ export default function App() {
     const nextStatus = statuses[(statuses.indexOf(currentStatus) + 1) % statuses.length];
     newTasks[index].status = nextStatus;
     setTasks(newTasks);
+    localStorage.setItem("tasks", JSON.stringify(newTasks)); // Guardar tareas actualizadas en localStorage
   };
 
   return (

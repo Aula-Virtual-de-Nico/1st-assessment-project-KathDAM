@@ -54,7 +54,6 @@ export default function TaskList({ tasks, deleteTask }) {
     });
     setTaskList(sortedTasks);
   };
-
   return (
     <div className="mt-4">
       <div className="container">
