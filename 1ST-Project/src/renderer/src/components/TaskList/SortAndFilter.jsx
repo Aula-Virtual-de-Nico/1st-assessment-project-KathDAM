@@ -1,21 +1,22 @@
 import React from 'react';
+
 const handleSort = (key) => {
-    setSortKey(key);
-    const sortedTasks = [...tasks].sort((a, b) => {
-      const sortByFunctions = {
-        deadline: () => {
-          return a.deadline - b.deadline; // Ordenación ascendente por fecha
-        },
-        title: () => a.title.localeCompare(b.title), // Ordenación alfabética por título
-        status: () => a.status.localeCompare(b.status), // Ordenación alfabética por estado
-      };
-  
-      return sortByFunctions[key] ? sortByFunctions[key]() : 0;
-    });
-  
-    setTasks(sortedTasks);
-  };
-  
+  setSortKey(key);
+  const sortedTasks = [...tasks].sort((a, b) => {
+    const sortByFunctions = {
+      deadline: () => {
+        return a.deadline - b.deadline; // Ordenación ascendente por fecha
+      },
+      title: () => a.title.localeCompare(b.title), // Ordenación alfabética por título
+      status: () => a.status.localeCompare(b.status), // Ordenación alfabética por estado
+    };
+
+    return sortByFunctions[key] ? sortByFunctions[key]() : 0;
+  });
+
+  setTasks(sortedTasks);
+};
+
 export default function SortAndFilter({ filter, setFilter, sortKey, setSortKey, handleSort }) {
   return (
     <div className="mb-4">
