@@ -1,6 +1,27 @@
 import React from 'react';
 
+<<<<<<< HEAD
 export default function SortAndFilter({ filter, setFilter, sortKey, handleSort }) {
+=======
+const handleSort = (key) => {
+  setSortKey(key);
+  const sortedTasks = [...tasks].sort((a, b) => {
+    const sortByFunctions = {
+      deadline: () => {
+        return a.deadline - b.deadline; // Ordenación ascendente por fecha
+      },
+      title: () => a.title.localeCompare(b.title), // Ordenación alfabética por título
+      status: () => a.status.localeCompare(b.status), // Ordenación alfabética por estado
+    };
+
+    return sortByFunctions[key] ? sortByFunctions[key]() : 0;
+  });
+
+  setTasks(sortedTasks);
+};
+
+export default function SortAndFilter({ filter, setFilter, sortKey, setSortKey, handleSort }) {
+>>>>>>> 0d092af67a662e7bcffc489d999d1b896e74caba
   return (
     <div className="mb-4">
       <div className="d-flex justify-content-between align-items-center">
